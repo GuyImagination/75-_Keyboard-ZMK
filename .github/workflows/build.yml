@@ -3,4 +3,26 @@ on: [push, pull_request, workflow_dispatch]
 
 jobs:
   build:
-    uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@v0.3
+    runs-on: ubuntu-latest
+    container:
+      image: zmkfirmware/zmk-build-arm:stable
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Strip BOM from all config files
+        run: |
+          for f in $(find . -name "*.keymap" -o -name "*.overlay"); do
+            sed -i '1s/^\xEF\xBB\xBF//' "$f"
+          done
+
+      - name: West Init
+        run: west init -l config
+
+      - name: West Update
+        run: west update
+
+      - name: Build
+        run: |
+          west build -s zmk/app -b nice_nano_v2 \
+            -- -DZMK_CONFIG=$GITHUB_WORKSPACE/config \
+            -DSHIELD=Eyesore
