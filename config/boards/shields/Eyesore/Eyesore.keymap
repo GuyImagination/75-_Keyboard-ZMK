@@ -1,0 +1,32 @@
+/ {
+    keymap {
+        compatible = "zmk,keymap";
+
+        default_layer {
+            display-name = "Base";
+            bindings = <
+                &kp Z    &kp M       &kp K
+                &mo 1    &kp LSHIFT  &mo 2
+                &kp Q    &kp W       &kp E
+            >;
+        };
+
+        layer_1 {
+            display-name = "ABC";
+            bindings = <
+                &kp A     &kp B     &kp C
+                &trans    &trans    &trans
+                &trans    &trans    &trans
+            >;
+        };
+
+        layer_2 {
+            display-name = "XYZ";
+            bindings = <
+                &kp X        &kp Y       &kp Z
+                &kp LCTRL    &kp LALT    &trans
+                &trans       &trans      &trans
+            >;
+        };
+    };
+};
