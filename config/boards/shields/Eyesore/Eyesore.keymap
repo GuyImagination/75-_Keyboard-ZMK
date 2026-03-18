@@ -7,7 +7,7 @@
 
 		default_layer {
 			display-name = "Base";
-			bindings = 
+			bindings = <
 				&kp Z    &kp M       &kp K
 				&kp Z    &kp LSHIFT  &kp Z
 				&kp Q    &kp W       &kp E
