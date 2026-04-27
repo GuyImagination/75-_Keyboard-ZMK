@@ -4,15 +4,10 @@ manifest:
   remotes:
     - name: zmkfirmware
       url-base: https://github.com/zmkfirmware
-    - name: uebari # One popular 595 implementation
-      url-base: https://github.com/uebari
   projects:
     - name: zmk
       remote: zmkfirmware
       revision: main
       import: app/west.yml
-    - name: zmk-595 # The missing link
-      remote: uebari
-      revision: main
   self:
     path: config
