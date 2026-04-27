@@ -3,4 +3,7 @@ if SHIELD_EYESORE
 config ZMK_KEYBOARD_NAME
     default "Eyesore"
 
+config SPI
+    default y
+
 endif
