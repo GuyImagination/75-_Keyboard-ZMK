@@ -1,8 +1,26 @@
 #include <dt-bindings/zmk/matrix_transform.h>
 
 / {
+    zmk_kscan: kscan_composite {
+        compatible = "zmk,kscan-composite";
+        rows = <6>;
+        columns = <14>;
+
+        // This pulls in your main GPIO matrix (Rows 0-3)
+        matrix {
+            kscan = <&default_kscan>;
+        };
+
+        // This pulls in your Shift Register matrix (Rows 4-5)
+        // We use an offset so these rows don't overlap with the main ones
+        shift {
+            kscan = <&kscan_shift>;
+            row-offset = <4>; 
+        };
+    };
+
     chosen {
-        zmk,kscan = &default_kscan;
+        zmk,kscan = &zmk_kscan; // Point here instead of default_kscan
         zmk,matrix_transform = &default_transform;
         zmk,display = &oled;
     };
@@ -22,7 +40,24 @@
         row-gpios
             = <&shifter 0 GPIO_ACTIVE_HIGH>
             , <&shifter 1 GPIO_ACTIVE_HIGH>
-        ;
+            ;
+        // You MUST include these even if they are duplicates
+        col-gpios
+            = <&gpio0 6  GPIO_ACTIVE_HIGH>
+            , <&gpio0 8  GPIO_ACTIVE_HIGH>
+            , <&gpio0 17 GPIO_ACTIVE_HIGH>
+            , <&gpio0 20 GPIO_ACTIVE_HIGH>
+            , <&gpio0 22 GPIO_ACTIVE_HIGH>
+            , <&gpio0 24 GPIO_ACTIVE_HIGH>
+            , <&gpio1 0  GPIO_ACTIVE_HIGH>
+            , <&gpio0 11 GPIO_ACTIVE_HIGH>
+            , <&gpio1 4  GPIO_ACTIVE_HIGH>
+            , <&gpio1 6  GPIO_ACTIVE_HIGH>
+            , <&gpio0 9  GPIO_ACTIVE_HIGH>
+            , <&gpio0 10 GPIO_ACTIVE_HIGH>
+            , <&gpio1 11 GPIO_ACTIVE_HIGH>
+            , <&gpio1 13 GPIO_ACTIVE_HIGH>
+            ;
     };
 
     default_kscan: kscan_main {
