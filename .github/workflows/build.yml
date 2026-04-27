@@ -23,6 +23,3 @@ jobs:
   build:
     needs: fix-files
     uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@v0.3
-    with:
-      # This tells the build script to look into the downloaded module
-      extra_modules: modules/zmk-595
