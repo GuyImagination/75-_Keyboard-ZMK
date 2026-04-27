@@ -26,13 +26,29 @@
     };
 
     kscan_shift: kscan_shift {
-        compatible = "zmk,kscan-gpio-matrix";
-        diode-direction = "col2row";
-        row-gpios
-            = <&shifter 0 GPIO_ACTIVE_HIGH>
-            , <&shifter 1 GPIO_ACTIVE_HIGH>
-            ;
-    };
+            compatible = "zmk,kscan-gpio-matrix";
+            diode-direction = "col2row";
+            row-gpios
+                = <&shifter 0 GPIO_ACTIVE_HIGH>
+                , <&shifter 1 GPIO_ACTIVE_HIGH>
+                ;
+            col-gpios
+                = <&gpio0 6  GPIO_ACTIVE_HIGH>
+                , <&gpio0 8  GPIO_ACTIVE_HIGH>
+                , <&gpio0 17 GPIO_ACTIVE_HIGH>
+                , <&gpio0 20 GPIO_ACTIVE_HIGH>
+                , <&gpio0 22 GPIO_ACTIVE_HIGH>
+                , <&gpio0 24 GPIO_ACTIVE_HIGH>
+                , <&gpio1 0  GPIO_ACTIVE_HIGH>
+                , <&gpio0 11 GPIO_ACTIVE_HIGH>
+                , <&gpio1 4  GPIO_ACTIVE_HIGH>
+                , <&gpio1 6  GPIO_ACTIVE_HIGH>
+                , <&gpio0 9  GPIO_ACTIVE_HIGH>
+                , <&gpio0 10 GPIO_ACTIVE_HIGH>
+                , <&gpio1 11 GPIO_ACTIVE_HIGH>
+                , <&gpio1 13 GPIO_ACTIVE_HIGH>
+                ;
+        };
 
     default_kscan: kscan_main {
         compatible = "zmk,kscan-gpio-matrix";
