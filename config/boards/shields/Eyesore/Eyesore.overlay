@@ -7,71 +7,25 @@
         zmk,display = &oled;
     };
 
-    /* ───── SPI bus for shift register ───── */
-    &spi1 {
-        compatible = "nordic,nrf-spim";
-        status = "okay";
-        mosi-pin = <33>;  /* P1.01 = 32+1 */
-        sck-pin  = <39>;  /* P1.07 = 32+7 */
-        cs-gpios = <&gpio1 2 GPIO_ACTIVE_LOW>;  /* P1.02 = RCLK latch */
-
-        shifter: 595@0 {
-            compatible = "zmk,gpio-595";
-            status = "okay";
-            gpio-controller;
-            spi-max-frequency = <200000>;
-            reg = <0>;
-            #gpio-cells = <2>;
-            ngpios = <8>;
-        };
-    };
-
-    /* ───── I2C for OLED ───── */
-    &i2c0 {
-        compatible = "nordic,nrf-twim";
-        status = "okay";
-        sda-pin = <20>;  /* P0.20 = D3 */
-        scl-pin = <22>;  /* P0.22 = D4 */
-
-        oled: ssd1306@3c {
-            compatible = "solomon,ssd1306fb";
-            reg = <0x3c>;
-            width = <128>;
-            height = <32>;
-            segment-offset = <0>;
-            page-offset = <0>;
-            display-offset = <0>;
-            multiplex-ratio = <31>;
-            segment-remap;
-            com-invdir;
-            com-sequential;
-            prechargep = <0x22>;
-        };
-    };
-
-    /* ───── Rotary encoder ───── */
     encoders {
         compatible = "zmk,encoders";
-
         encoder0: encoder_0 {
-            a-gpios = <&gpio1 0 GPIO_ACTIVE_LOW>;   /* D6 = P1.00 */
-            b-gpios = <&gpio0 11 GPIO_ACTIVE_LOW>;  /* D7 = P0.11 */
+            a-gpios = <&gpio1 0 GPIO_ACTIVE_LOW>;
+            b-gpios = <&gpio0 11 GPIO_ACTIVE_LOW>;
             steps = <4>;
         };
     };
 
-    /* ───── Shift register rows (via 595) ───── */
-    kscan0: kscan_0 {
+    kscan_shift: kscan_shift {
         compatible = "zmk,kscan-gpio-matrix";
         diode-direction = "col2row";
         row-gpios
-            = <&shifter 0 GPIO_ACTIVE_HIGH>   /* 595 Q0 → row wire 1 */
-            , <&shifter 1 GPIO_ACTIVE_HIGH>   /* 595 Q1 → row wire 2 */
+            = <&shifter 0 GPIO_ACTIVE_HIGH>
+            , <&shifter 1 GPIO_ACTIVE_HIGH>
         ;
     };
 
-    /* ───── Main matrix ───── */
-    default_kscan: kscan1 {
+    default_kscan: kscan_main {
         compatible = "zmk,kscan-gpio-matrix";
         diode-direction = "col2row";
         wakeup-source;
@@ -113,5 +67,41 @@
             RC(4,0)  RC(4,1)  RC(4,2)  RC(4,3)  RC(4,4)  RC(4,5)  RC(4,6)  RC(4,7)  RC(4,8)  RC(4,9)  RC(4,10) RC(4,11) RC(4,12) RC(4,13)
             RC(5,0)  RC(5,1)  RC(5,2)                    RC(5,5)  RC(5,6)  RC(5,7)  RC(5,8)  RC(5,9)  RC(5,10) RC(5,11) RC(5,12) RC(5,13)
         >;
+    };
+};
+
+/* Reference nice_nano's pre-defined SPI bus (uses its own MOSI/SCK pins) */
+&pro_micro_spi {
+    status = "okay";
+    cs-gpios = <&gpio1 2 GPIO_ACTIVE_LOW>;  /* P1.02 = latch */
+
+    shifter: 595@0 {
+        compatible = "zmk,gpio-595";
+        status = "okay";
+        gpio-controller;
+        spi-max-frequency = <200000>;
+        reg = <0>;
+        #gpio-cells = <2>;
+        ngpios = <8>;
+    };
+};
+
+/* Reference nice_nano's pre-defined I2C bus */
+&pro_micro_i2c {
+    status = "okay";
+
+    oled: ssd1306@3c {
+        compatible = "solomon,ssd1306fb";
+        reg = <0x3c>;
+        width = <128>;
+        height = <32>;
+        segment-offset = <0>;
+        page-offset = <0>;
+        display-offset = <0>;
+        multiplex-ratio = <31>;
+        segment-remap;
+        com-invdir;
+        com-sequential;
+        prechargep = <0x22>;
     };
 };
