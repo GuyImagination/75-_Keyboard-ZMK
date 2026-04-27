@@ -1,13 +1,38 @@
 #include <dt-bindings/zmk/matrix_transform.h>
 
-&gpio_spi {
+/* 1. Map your specific pins to the SPI hardware */
+&pinctrl {
+    spi1_default: spi1_default {
+        group1 {
+            psels = <NRF_PSEL(SPIM_SCK, 1, 7)>,   /* Pin 11 on 595 (SCK) */
+                    <NRF_PSEL(SPIM_MOSI, 1, 1)>;  /* Pin 14 on 595 (MOSI) */
+        };
+    };
+
+    spi1_sleep: spi1_sleep {
+        group1 {
+            psels = <NRF_PSEL(SPIM_SCK, 1, 7)>,
+                    <NRF_PSEL(SPIM_MOSI, 1, 1)>;
+            low-power-enable;
+        };
+    };
+};
+
+/* 2. Target spi1 and attach the shifter */
+&spi1 {
+    compatible = "nordic,nrf-spim";
     status = "okay";
-    cs-gpios = <&gpio1 1 GPIO_ACTIVE_LOW>;
+    pinctrl-0 = <&spi1_default>;
+    pinctrl-1 = <&spi1_sleep>;
+    pinctrl-names = "default", "sleep";
+    
+    cs-gpios = <&gpio1 2 GPIO_ACTIVE_LOW>; /* Pin 12 on 595 to P1.02 */
+
     shifter: 595@0 {
         compatible = "zmk,gpio-595";
         status = "okay";
         gpio-controller;
-        spi-max-frequency = <200000>;
+        spi-max-frequency = <2000000>;
         reg = <0>;
         #gpio-cells = <2>;
         ngpios = <8>;
